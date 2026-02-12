@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - ShopHub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .filters {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active {
+            border-color: #667eea;
+            background: #f0f4ff;
+            color: #667eea;
+        }
+
+        .order-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .order-id {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .order-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .order-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-processing {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .status-shipped {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-delivered {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .order-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .order-item {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .item-image {
+            width: 80px;
+            height: 80px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .item-quantity {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .item-price {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .order-total {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .order-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 15px;
+        }
+
+        .empty-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h2 {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state p {
+            color: #999;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 768px) {
+
+            .order-header,
+            .order-footer {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .order-actions {
+                width: 100%;
+            }
+
+            .btn {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo" onclick="window.location.href='index.html'">🛍️ ShopHub</div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="product_list.htm">Products</a>
+                <a href="cart.html">Cart</a>
+                <a href="profile.html">Profile</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>📦 My Orders</h1>
+
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterOrders('all')">All Orders</button>
+            <button class="filter-btn" onclick="filterOrders('pending')">Pending</button>
+            <button class="filter-btn" onclick="filterOrders('processing')">Processing</button>
+            <button class="filter-btn" onclick="filterOrders('shipped')">Shipped</button>
+            <button class="filter-btn" onclick="filterOrders('delivered')">Delivered</button>
+            <button class="filter-btn" onclick="filterOrders('cancelled')">Cancelled</button>
+        </div>
+
+        <div id="ordersContainer"></div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:5000';
+        let orders = [];
+        let currentFilter = 'all';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            loadOrders();
+        });
+
+        function checkAuth() {
+            if (!localStorage.getItem('token')) {
+                window.location.href = 'login.html';
+            }
+        }
+
+        async function loadOrders() {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_BASE_URL}/api/orders`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    orders = await response.json();
+                } else {
+                    orders = generateDemoOrders();
+                }
+
+                displayOrders();
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                orders = generateDemoOrders();
+                displayOrders();
+            }
+        }
+
+        function generateDemoOrders() {
+            return [
+                {
+                    order_id: 'ORD-2026-001',
+                    date: '2026-01-20',
+                    status: 'delivered',
+                    items: [
+                        { name: 'Wireless Headphones', quantity: 1, price: 79.99, image: '🎧' },
+                        { name: 'Smart Watch', quantity: 1, price: 199.99, image: '⌚' }
+                    ],
+                    total: 309.97
+                },
+                {
+                    order_id: 'ORD-2026-002',
+                    date: '2026-01-22',
+                    status: 'shipped',
+                    items: [
+                        { name: 'Running Shoes', quantity: 2, price: 89.99, image: '👟' }
+                    ],
+                    total: 189.98
+                },
+                {
+                    order_id: 'ORD-2026-003',
+                    date: '2026-01-23',
+                    status: 'processing',
+                    items: [
+                        { name: 'Coffee Maker', quantity: 1, price: 129.99, image: '☕' },
+                        { name: 'Cotton T-Shirt', quantity: 3, price: 24.99, image: '👕' }
+                    ],
+                    total: 204.96
+                }
+            ];
+        }
+
+        function displayOrders() {
+            const container = document.getElementById('ordersContainer');
+            const filteredOrders = currentFilter === 'all'
+                ? orders
+                : orders.filter(order => order.status === currentFilter);
+
+            if (filteredOrders.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📦</div>
+                        <h2>No orders found</h2>
+                        <p>You haven't placed any orders yet</p>
+                        <button class="btn btn-primary" onclick="window.location.href='index.html'">Start Shopping</button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filteredOrders.map(order => `
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <div class="order-id">Order #${order.order_id}</div>
+                            <div class="order-date">Placed on ${formatDate(order.date)}</div>
+                        </div>
+                        <div class="order-status status-${order.status}">
+                            ${capitalizeFirst(order.status)}
+                        </div>
+                    </div>
+                    <div class="order-items">
+                        ${order.items.map(item => `
+                            <div class="order-item">
+                                <div class="item-image">${item.image || '📦'}</div>
+                                <div class="item-details">
+                                    <div class="item-name">${item.name}</div>
+                                    <div class="item-quantity">Quantity: ${item.quantity}</div>
+                                </div>
+                                <div class="item-price">$${(item.price * item.quantity).toFixed(2)}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-total">Total: $${order.total.toFixed(2)}</div>
+                        <div class="order-actions">
+                            <button class="btn btn-secondary" onclick="trackOrder('${order.order_id}')">Track Order</button>
+                            ${order.status === 'delivered' ? `
+                                <button class="btn btn-primary" onclick="reorder('${order.order_id}')">Order Again</button>
+                            ` : ''}
+                            ${order.status === 'pending' || order.status === 'processing' ? `
+                                <button class="btn btn-secondary" onclick="cancelOrder('${order.order_id}')">Cancel</button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterOrders(status) {
+            currentFilter = status;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            displayOrders();
+        }
+
+        function trackOrder(orderId) {
+            alert(`Tracking information for order ${orderId} will be displayed here`);
+        }
+
+        function reorder(orderId) {
+            const order = orders.find(o => o.order_id === orderId);
+            if (order) {
+                localStorage.setItem('cart', JSON.stringify(order.items));
+                window.location.href = 'cart.html';
+            }
+        }
+
+        function cancelOrder(orderId) {
+            if (confirm('Are you sure you want to cancel this order?')) {
+                alert(`Order ${orderId} has been cancelled`);
+                const order = orders.find(o => o.order_id === orderId);
+                if (order) order.status = 'cancelled';
+                displayOrders();
+            }
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        function capitalizeFirst(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+    </script>
+</body>
+
+</html>

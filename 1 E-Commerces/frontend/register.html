@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - ShopHub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .register-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 500px;
+            padding: 3rem;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        input.error {
+            border-color: #e74c3c;
+        }
+
+        input.success {
+            border-color: #2ecc71;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            color: #2ecc71;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .password-strength {
+            margin-top: 0.5rem;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .password-strength.show {
+            display: block;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+
+        .strength-weak {
+            width: 33%;
+            background: #e74c3c;
+        }
+
+        .strength-medium {
+            width: 66%;
+            background: #f39c12;
+        }
+
+        .strength-strong {
+            width: 100%;
+            background: #2ecc71;
+        }
+
+        .password-requirements {
+            margin-top: 0.75rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            display: none;
+        }
+
+        .password-requirements.show {
+            display: block;
+        }
+
+        .requirement {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            color: #666;
+        }
+
+        .requirement.met {
+            color: #2ecc71;
+        }
+
+        .requirement-icon {
+            margin-right: 0.5rem;
+            font-weight: bold;
+        }
+
+        .verification-section {
+            display: none;
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: #f0f4ff;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+        }
+
+        .verification-section.show {
+            display: block;
+        }
+
+        .verification-info {
+            color: #667eea;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .verification-input {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .verification-input input {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .timer {
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .resend-link {
+            text-align: center;
+            color: #667eea;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .resend-link.disabled {
+            color: #ccc;
+            cursor: not-allowed;
+            text-decoration: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .register-container {
+                padding: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="register-container">
+        <div class="logo">🛍️</div>
+        <h2>Create Account</h2>
+        <p class="subtitle">Join ShopHub today and start shopping!</p>
+
+        <div id="alertBox" class="alert"></div>
+
+        <form id="registerForm" autocomplete="off">
+            <div class="form-group">
+                <label>Full Name <span class="required">*</span></label>
+                <input type="text" id="fullName" placeholder="Enter your full name" required>
+                <div id="nameError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Email Address <span class="required">*</span></label>
+                <input type="email" id="email" placeholder="your@email.com" required>
+                <div id="emailError" class="error-message"></div>
+                <div id="emailSuccess" class="success-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Mobile Number <span class="required">*</span></label>
+                <input type="tel" id="mobile" placeholder="+91 XXXXX XXXXX" required>
+                <div id="mobileError" class="error-message"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Password <span class="required">*</span></label>
+                <div class="input-wrapper">
+                    <input type="password" id="password" placeholder="Create a strong password" required>
+                    <span class="input-icon" onclick="togglePassword('password')">👁️</span>
+                </div>
+                <div class="password-strength" id="passwordStrength">
+                    <div class="password-strength-bar" id="strengthBar"></div>
+                </div>
+                <div id="passwordError" class="error-message"></div>
+                <div class="password-requirements" id="passwordRequirements">
+                    <div class="requirement" id="req-length">
+                        <span class="requirement-icon">✗</span>
+                        <span>Minimum 9 characters</span>
+                    </div>
+                    <div class="requirement" id="req-letter">
+                        <span class="requirement-icon">✗</span>
+                        <span>At least one letter</span>
+                    </div>
+                    <div class="requirement" id="req-number">
+                        <span class="requirement-icon">✗</span>
+                        <span>At least one number</span>
+                    </div>
+                    <div class="requirement" id="req-special">
+                        <span class="requirement-icon">✗</span>
+                        <span>At least one special character (@$!%*?&#)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Confirm Password <span class="required">*</span></label>
+                <div class="input-wrapper">
+                    <input type="password" id="confirmPassword" placeholder="Re-enter your password" required>
+                    <span class="input-icon" onclick="togglePassword('confirmPassword')">👁️</span>
+                </div>
+                <div id="confirmPasswordError" class="error-message"></div>
+            </div>
+
+            <button type="submit" id="registerBtn">Create Account</button>
+        </form>
+
+        <div class="verification-section" id="verificationSection">
+            <div class="verification-info">
+                📧 We've sent a verification code to your email. Please check your inbox.
+            </div>
+            <div class="verification-input">
+                <input type="text" maxlength="1" class="verification-code" data-index="0">
+                <input type="text" maxlength="1" class="verification-code" data-index="1">
+                <input type="text" maxlength="1" class="verification-code" data-index="2">
+                <input type="text" maxlength="1" class="verification-code" data-index="3">
+                <input type="text" maxlength="1" class="verification-code" data-index="4">
+                <input type="text" maxlength="1" class="verification-code" data-index="5">
+            </div>
+            <div class="timer" id="timer">Time remaining: 5:00</div>
+            <div class="resend-link disabled" id="resendLink">Resend Code</div>
+            <button onclick="verifyCode()" id="verifyBtn">Verify & Register</button>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Processing...</p>
+        </div>
+
+        <div class="login-link">
+            Already have an account? <a href="login.html">Login here</a>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:5000';
+        let verificationCode = '';
+        let userEmail = '';
+        let timerInterval;
+
+        // Form validation on input
+        document.getElementById('fullName').addEventListener('input', validateName);
+        document.getElementById('email').addEventListener('blur', validateEmail);
+        document.getElementById('mobile').addEventListener('input', validateMobile);
+        document.getElementById('password').addEventListener('input', validatePassword);
+        document.getElementById('confirmPassword').addEventListener('input', validateConfirmPassword);
+
+        // Show password requirements on focus
+        document.getElementById('password').addEventListener('focus', () => {
+            document.getElementById('passwordRequirements').classList.add('show');
+        });
+
+        // Validate Name
+        function validateName() {
+            const name = document.getElementById('fullName').value.trim();
+            const errorDiv = document.getElementById('nameError');
+            const input = document.getElementById('fullName');
+
+            if (name.length < 3) {
+                showError(input, errorDiv, 'Name must be at least 3 characters');
+                return false;
+            }
+            if (!/^[a-zA-Z\s]+$/.test(name)) {
+                showError(input, errorDiv, 'Name can only contain letters');
+                return false;
+            }
+            hideError(input, errorDiv);
+            return true;
+        }
+
+        // Validate Email
+        async function validateEmail() {
+            const email = document.getElementById('email').value.trim();
+            const errorDiv = document.getElementById('emailError');
+            const successDiv = document.getElementById('emailSuccess');
+            const input = document.getElementById('email');
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailRegex.test(email)) {
+                showError(input, errorDiv, 'Please enter a valid email address');
+                successDiv.classList.remove('show');
+                return false;
+            }
+
+            // Check if email already exists
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/auth/check-email`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+
+                const data = await response.json();
+
+                if (data.exists) {
+                    showError(input, errorDiv, 'This email is already registered');
+                    successDiv.classList.remove('show');
+                    return false;
+                }
+
+                hideError(input, errorDiv);
+                successDiv.textContent = '✓ Email is available';
+                successDiv.classList.add('show');
+                return true;
+            } catch (error) {
+                console.error('Error checking email:', error);
+                hideError(input, errorDiv);
+                return true;
+            }
+        }
+
+        // Validate Mobile
+        function validateMobile() {
+            const mobile = document.getElementById('mobile').value.trim();
+            const errorDiv = document.getElementById('mobileError');
+            const input = document.getElementById('mobile');
+
+            const mobileRegex = /^[+]?[0-9]{10,15}$/;
+
+            if (!mobileRegex.test(mobile.replace(/\s/g, ''))) {
+                showError(input, errorDiv, 'Please enter a valid mobile number (10-15 digits)');
+                return false;
+            }
+            hideError(input, errorDiv);
+            return true;
+        }
+
+        // Validate Password
+        function validatePassword() {
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('passwordError');
+            const input = document.getElementById('password');
+            const strengthDiv = document.getElementById('passwordStrength');
+            const strengthBar = document.getElementById('strengthBar');
+
+            strengthDiv.classList.add('show');
+
+            // Minimum 9 characters
+            const hasLength = password.length >= 9;
+            updateRequirement('req-length', hasLength);
+
+            // At least one letter
+            const hasLetter = /[a-zA-Z]/.test(password);
+            updateRequirement('req-letter', hasLetter);
+
+            // At least one number
+            const hasNumber = /[0-9]/.test(password);
+            updateRequirement('req-number', hasNumber);
+
+            // At least one special character
+            const hasSpecial = /[@$!%*?&#]/.test(password);
+            updateRequirement('req-special', hasSpecial);
+
+            const allMet = hasLength && hasLetter && hasNumber && hasSpecial;
+
+            if (!allMet) {
+                input.classList.add('error');
+                input.classList.remove('success');
+
+                // Calculate strength
+                const metCount = [hasLength, hasLetter, hasNumber, hasSpecial].filter(Boolean).length;
+                strengthBar.className = 'password-strength-bar';
+
+                if (metCount <= 1) {
+                    strengthBar.classList.add('strength-weak');
+                } else if (metCount <= 3) {
+                    strengthBar.classList.add('strength-medium');
+                } else {
+                    strengthBar.classList.add('strength-strong');
+                }
+
+                return false;
+            }
+
+            input.classList.remove('error');
+            input.classList.add('success');
+            strengthBar.className = 'password-strength-bar strength-strong';
+            hideError(input, errorDiv);
+            return true;
+        }
+
+        // Update requirement status
+        function updateRequirement(id, met) {
+            const req = document.getElementById(id);
+            const icon = req.querySelector('.requirement-icon');
+
+            if (met) {
+                req.classList.add('met');
+                icon.textContent = '✓';
+            } else {
+                req.classList.remove('met');
+                icon.textContent = '✗';
+            }
+        }
+
+        // Validate Confirm Password
+        function validateConfirmPassword() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const errorDiv = document.getElementById('confirmPasswordError');
+            const input = document.getElementById('confirmPassword');
+
+            if (password !== confirmPassword) {
+                showError(input, errorDiv, 'Passwords do not match');
+                return false;
+            }
+            hideError(input, errorDiv);
+            return true;
+        }
+
+        // Toggle password visibility
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            field.type = field.type === 'password' ? 'text' : 'password';
+        }
+
+        // Show error
+        function showError(input, errorDiv, message) {
+            input.classList.add('error');
+            input.classList.remove('success');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+        }
+
+        // Hide error
+        function hideError(input, errorDiv) {
+            input.classList.remove('error');
+            input.classList.add('success');
+            errorDiv.classList.remove('show');
+        }
+
+        // Show alert
+        function showAlert(message, type) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type} show`;
+
+            setTimeout(() => {
+                alertBox.classList.remove('show');
+            }, 5000);
+        }
+
+        // Show verification section
+        function showVerificationSection() {
+            document.getElementById('verificationSection').classList.add('show');
+            startTimer();
+            setupVerificationInputs();
+        }
+
+        // Setup verification inputs
+        function setupVerificationInputs() {
+            const inputs = document.querySelectorAll('.verification-code');
+
+            inputs.forEach((input, index) => {
+                // Remove old listeners by cloning
+                const newInput = input.cloneNode(true);
+                input.parentNode.replaceChild(newInput, input);
+            });
+
+            // Get fresh inputs after cloning
+            const freshInputs = document.querySelectorAll('.verification-code');
+
+            freshInputs.forEach((input, index) => {
+                input.addEventListener('input', (e) => {
+                    if (e.target.value.length === 1 && index < freshInputs.length - 1) {
+                        freshInputs[index + 1].focus();
+                    }
+                });
+
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && e.target.value === '' && index > 0) {
+                        freshInputs[index - 1].focus();
+                    }
+                });
+
+                input.addEventListener('paste', (e) => {
+                    e.preventDefault();
+                    const paste = e.clipboardData.getData('text').slice(0, 6);
+                    paste.split('').forEach((char, i) => {
+                        if (freshInputs[i]) freshInputs[i].value = char;
+                    });
+                    if (paste.length === 6) freshInputs[5].focus();
+                });
+            });
+        }
+
+        // Start countdown timer
+        function startTimer() {
+            // Clear any existing timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+
+            let timeLeft = 300; // 5 minutes
+            const timerDiv = document.getElementById('timer');
+            const resendLink = document.getElementById('resendLink');
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDiv.textContent = `Time remaining: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timerDiv.textContent = 'Code expired';
+                    resendLink.classList.remove('disabled');
+                    resendLink.onclick = resendCode;
+                }
+            }, 1000);
+        }
+
+        // Resend verification code
+        async function resendCode() {
+            clearInterval(timerInterval);
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/auth/send-verification`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: userEmail })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // DO NOT store or display the code
+                    showAlert('New verification code sent to your email!', 'success');
+                    document.getElementById('resendLink').classList.add('disabled');
+                    document.getElementById('resendLink').onclick = null;
+                    startTimer();
+                } else {
+                    showAlert(data.message || 'Failed to resend code', 'error');
+                }
+            } catch (error) {
+                showAlert('Failed to resend code', 'error');
+            }
+        }
+
+        // Verify code and register
+        async function verifyCode() {
+            const inputs = document.querySelectorAll('.verification-code');
+            const enteredCode = Array.from(inputs).map(input => input.value).join('');
+
+            if (enteredCode.length !== 6) {
+                showAlert('Please enter the complete 6-digit code', 'error');
+                return;
+            }
+
+            try {
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('verificationSection').style.display = 'none';
+
+                // Verify code
+                const verifyResponse = await fetch(`${API_BASE_URL}/api/auth/verify-code`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: userEmail,
+                        code: enteredCode
+                    })
+                });
+
+                if (!verifyResponse.ok) {
+                    throw new Error('Invalid verification code');
+                }
+
+                // Register user
+                const registerData = {
+                    full_name: document.getElementById('fullName').value.trim(),
+                    email: userEmail,
+                    mobile: document.getElementById('mobile').value.trim(),
+                    password: document.getElementById('password').value
+                };
+
+                const registerResponse = await fetch(`${API_BASE_URL}/api/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(registerData)
+                });
+
+                const data = await registerResponse.json();
+
+                document.getElementById('loading').style.display = 'none';
+
+                if (registerResponse.ok) {
+                    clearInterval(timerInterval);
+                    showAlert('Registration successful! Redirecting to login...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    document.getElementById('verificationSection').style.display = 'block';
+                    showAlert(data.message || 'Registration failed', 'error');
+                }
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('verificationSection').style.display = 'block';
+                console.error('Error:', error);
+                showAlert(error.message || 'Verification failed', 'error');
+            }
+        }
+
+        // Form submission
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Validate all fields
+            const isNameValid = validateName();
+            const isEmailValid = await validateEmail();
+            const isMobileValid = validateMobile();
+            const isPasswordValid = validatePassword();
+            const isConfirmPasswordValid = validateConfirmPassword();
+
+            if (!isNameValid || !isEmailValid || !isMobileValid || !isPasswordValid || !isConfirmPasswordValid) {
+                showAlert('Please fix all errors before submitting', 'error');
+                return;
+            }
+
+            userEmail = document.getElementById('email').value.trim();
+
+            // Send verification code
+            try {
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('registerForm').style.display = 'none';
+
+                const response = await fetch(`${API_BASE_URL}/api/auth/send-verification`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: userEmail })
+                });
+
+                const data = await response.json();
+
+                document.getElementById('loading').style.display = 'none';
+
+                if (response.ok) {
+                    // DO NOT store or display the verification code
+                    showAlert('Verification code sent to your email!', 'success');
+                    showVerificationSection();
+                } else {
+                    showAlert(data.message || 'Failed to send verification code', 'error');
+                    document.getElementById('registerForm').style.display = 'block';
+                }
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('registerForm').style.display = 'block';
+                console.error('Error:', error);
+                showAlert('Failed to send verification code', 'error');
+            }
+        });
+    </script>
+</body>
+
+</html>

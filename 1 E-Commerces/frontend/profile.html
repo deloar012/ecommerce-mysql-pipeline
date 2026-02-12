@@ -1,0 +1,1770 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - ShopHub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            margin: 0 auto 1rem;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .avatar-upload {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+        }
+
+        .profile-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.3rem;
+        }
+
+        .profile-email {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .menu-items {
+            list-style: none;
+        }
+
+        .menu-item {
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: #555;
+        }
+
+        .menu-item:hover {
+            background: #f8f9fa;
+            color: #667eea;
+        }
+
+        .menu-item.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .menu-icon {
+            font-size: 1.2rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            min-height: 600px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        /* Form Styles */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        input,
+        textarea,
+        select {
+            padding: 0.9rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon input {
+            padding-right: 3rem;
+        }
+
+        .icon-right {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.9rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #555;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1.5rem;
+            border-radius: 15px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Order Card */
+        .order-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s;
+        }
+
+        .order-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .order-id {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .order-status {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-delivered {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-processing {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-shipped {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .order-items {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .order-item {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .item-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #e9ecef;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.2rem;
+        }
+
+        .item-specs {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .item-price {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .order-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .order-total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Address Card */
+        .address-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .address-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 2px solid #e9ecef;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .address-card:hover {
+            border-color: #667eea;
+        }
+
+        .address-card.default {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .address-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #667eea;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .address-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .address-details {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .address-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        /* Wishlist */
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .wishlist-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .wishlist-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border-color: #667eea;
+        }
+
+        .wishlist-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #e9ecef;
+        }
+
+        .wishlist-content {
+            padding: 1rem;
+        }
+
+        .wishlist-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .wishlist-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.8rem;
+        }
+
+        .remove-wishlist {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+        }
+
+        .remove-wishlist:hover {
+            background: #dc3545;
+            color: white;
+        }
+
+        /* Settings */
+        .settings-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 2px solid #e9ecef;
+        }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .settings-title {
+            font-weight: bold;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #667eea;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(24px);
+        }
+
+        /* Alert/Toast */
+        .toast {
+            position: fixed;
+            top: 100px;
+            right: 2rem;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            display: none;
+            align-items: center;
+            gap: 1rem;
+            z-index: 1000;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .toast.show {
+            display: flex;
+        }
+
+        .toast-success {
+            border-left: 4px solid #28a745;
+        }
+
+        .toast-error {
+            border-left: 4px solid #dc3545;
+        }
+
+        .toast-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-text {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .wishlist-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .address-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .wishlist-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .wishlist-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <span>🛍️</span>
+                <span>ShopHub</span>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="product_list.html">Products</a>
+                <a href="cart.html">Cart</a>
+                <a href="orders.html">Orders</a>
+                <a href="#" class="logout-btn" onclick="handleLogout(event)">Logout</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <span class="toast-icon">✓</span>
+        <span id="toastMessage">Success!</span>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="profile-header">
+                <div class="profile-avatar" onclick="document.getElementById('avatarInput').click()">
+                    <span id="avatarInitial">U</span>
+                    <div class="avatar-upload">
+                        📷
+                    </div>
+                </div>
+                <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+                <div class="profile-name" id="profileName">User Name</div>
+                <div class="profile-email" id="profileEmail">user@email.com</div>
+            </div>
+
+            <ul class="menu-items">
+                <li class="menu-item active" data-section="overview">
+                    <span class="menu-icon">📊</span>
+                    <span>Overview</span>
+                </li>
+                <li class="menu-item" data-section="personal-info">
+                    <span class="menu-icon">👤</span>
+                    <span>Personal Info</span>
+                </li>
+                <li class="menu-item" data-section="addresses">
+                    <span class="menu-icon">📍</span>
+                    <span>Addresses</span>
+                </li>
+                <li class="menu-item" data-section="orders">
+                    <span class="menu-icon">📦</span>
+                    <span>My Orders</span>
+                </li>
+                <li class="menu-item" data-section="wishlist">
+                    <span class="menu-icon">❤️</span>
+                    <span>Wishlist</span>
+                </li>
+                <li class="menu-item" data-section="payment-methods">
+                    <span class="menu-icon">💳</span>
+                    <span>Payment Methods</span>
+                </li>
+                <li class="menu-item" data-section="security">
+                    <span class="menu-icon">🔒</span>
+                    <span>Security</span>
+                </li>
+                <li class="menu-item" data-section="settings">
+                    <span class="menu-icon">⚙️</span>
+                    <span>Settings</span>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Overview Section -->
+            <section id="overview" class="section active">
+                <h2 class="section-title">
+                    <span>📊</span>
+                    Overview
+                </h2>
+                <p class="section-subtitle">Welcome back! Here's your account summary</p>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-value" id="totalOrders">0</div>
+                        <div class="stat-label">Total Orders</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">❤️</div>
+                        <div class="stat-value" id="wishlistCount">0</div>
+                        <div class="stat-label">Wishlist Items</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📍</div>
+                        <div class="stat-value" id="addressCount">0</div>
+                        <div class="stat-label">Saved Addresses</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-value" id="totalSpent">₹0</div>
+                        <div class="stat-label">Total Spent</div>
+                    </div>
+                </div>
+
+                <h3 style="margin: 2rem 0 1rem; color: #333;">Recent Orders</h3>
+                <div id="recentOrders"></div>
+            </section>
+
+            <!-- Personal Info Section -->
+            <section id="personal-info" class="section">
+                <h2 class="section-title">
+                    <span>👤</span>
+                    Personal Information
+                </h2>
+                <p class="section-subtitle">Manage your personal details and contact information</p>
+
+                <form id="personalInfoForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Full Name *</label>
+                            <input type="text" id="fullName" placeholder="John Doe" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address *</label>
+                            <input type="email" id="email" placeholder="john@example.com" required disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Mobile Number *</label>
+                            <input type="tel" id="mobile" placeholder="+91 98765 43210" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Date of Birth</label>
+                            <input type="date" id="dob">
+                        </div>
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select id="gender">
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Alternate Mobile</label>
+                            <input type="tel" id="alternateMobile" placeholder="+91 98765 43210">
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <button type="button" class="btn btn-secondary" onclick="resetPersonalInfo()">Cancel</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Addresses Section -->
+            <section id="addresses" class="section">
+                <h2 class="section-title">
+                    <span>📍</span>
+                    My Addresses
+                </h2>
+                <p class="section-subtitle">Manage your shipping and billing addresses</p>
+
+                <button class="btn btn-primary" onclick="showAddAddressModal()" style="margin-bottom: 2rem;">
+                    + Add New Address
+                </button>
+
+                <div id="addressesList" class="address-grid"></div>
+            </section>
+
+            <!-- Orders Section -->
+            <section id="orders" class="section">
+                <h2 class="section-title">
+                    <span>📦</span>
+                    My Orders
+                </h2>
+                <p class="section-subtitle">View and track all your orders</p>
+
+                <div id="ordersList"></div>
+            </section>
+
+            <!-- Wishlist Section -->
+            <section id="wishlist" class="section">
+                <h2 class="section-title">
+                    <span>❤️</span>
+                    My Wishlist
+                </h2>
+                <p class="section-subtitle">Items you've saved for later</p>
+
+                <div id="wishlistItems" class="wishlist-grid"></div>
+            </section>
+
+            <!-- Payment Methods Section -->
+            <section id="payment-methods" class="section">
+                <h2 class="section-title">
+                    <span>💳</span>
+                    Payment Methods
+                </h2>
+                <p class="section-subtitle">Manage your saved payment methods</p>
+
+                <button class="btn btn-primary" onclick="showAddPaymentModal()" style="margin-bottom: 2rem;">
+                    + Add Payment Method
+                </button>
+
+                <div id="paymentMethodsList"></div>
+            </section>
+
+            <!-- Security Section -->
+            <section id="security" class="section">
+                <h2 class="section-title">
+                    <span>🔒</span>
+                    Security
+                </h2>
+                <p class="section-subtitle">Manage your password and security settings</p>
+
+                <form id="passwordForm">
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Current Password *</label>
+                            <input type="password" id="currentPassword" placeholder="Enter current password" required>
+                        </div>
+                        <div class="form-group">
+                            <label>New Password *</label>
+                            <input type="password" id="newPassword" placeholder="Enter new password" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm New Password *</label>
+                            <input type="password" id="confirmNewPassword" placeholder="Re-enter new password" required>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">Update Password</button>
+                    </div>
+                </form>
+
+                <div class="settings-card" style="margin-top: 2rem;">
+                    <div class="settings-header">
+                        <div>
+                            <div class="settings-title">Two-Factor Authentication</div>
+                            <p style="color: #666; font-size: 0.9rem; margin-top: 0.3rem;">
+                                Add an extra layer of security to your account
+                            </p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="twoFactorToggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <div class="settings-title">Login Activity</div>
+                    <p style="color: #666; font-size: 0.9rem; margin: 0.5rem 0 1rem;">Recent login sessions</p>
+                    <div id="loginActivity"></div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings" class="section">
+                <h2 class="section-title">
+                    <span>⚙️</span>
+                    Settings
+                </h2>
+                <p class="section-subtitle">Customize your account preferences</p>
+
+                <div class="settings-card">
+                    <div class="settings-header">
+                        <div>
+                            <div class="settings-title">Email Notifications</div>
+                            <p style="color: #666; font-size: 0.9rem; margin-top: 0.3rem;">
+                                Receive updates about your orders
+                            </p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="emailNotifications" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <div class="settings-header">
+                        <div>
+                            <div class="settings-title">SMS Notifications</div>
+                            <p style="color: #666; font-size: 0.9rem; margin-top: 0.3rem;">
+                                Get order updates via SMS
+                            </p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="smsNotifications" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <div class="settings-header">
+                        <div>
+                            <div class="settings-title">Promotional Emails</div>
+                            <p style="color: #666; font-size: 0.9rem; margin-top: 0.3rem;">
+                                Receive offers and promotions
+                            </p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="promoEmails">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <div class="settings-title" style="color: #dc3545;">Danger Zone</div>
+                    <p style="color: #666; font-size: 0.9rem; margin: 0.5rem 0 1rem;">
+                        Once you delete your account, there is no going back. Please be certain.
+                    </p>
+                    <button class="btn btn-danger" onclick="confirmDeleteAccount()">Delete Account</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Add Address Modal -->
+    <div id="addressModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Address</h3>
+                <button class="close-modal" onclick="closeAddressModal()">×</button>
+            </div>
+            <form id="addressForm">
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="addressName" required>
+                </div>
+                <div class="form-group">
+                    <label>Mobile Number *</label>
+                    <input type="tel" id="addressMobile" required>
+                </div>
+                <div class="form-group">
+                    <label>Pincode *</label>
+                    <input type="text" id="addressPincode" required>
+                </div>
+                <div class="form-group">
+                    <label>Address Line 1 *</label>
+                    <input type="text" id="addressLine1" placeholder="House No., Building Name" required>
+                </div>
+                <div class="form-group">
+                    <label>Address Line 2</label>
+                    <input type="text" id="addressLine2" placeholder="Road Name, Area, Colony">
+                </div>
+                <div class="form-group">
+                    <label>City *</label>
+                    <input type="text" id="addressCity" required>
+                </div>
+                <div class="form-group">
+                    <label>State *</label>
+                    <select id="addressState" required>
+                        <option value="">Select State</option>
+                        <option value="West Bengal">West Bengal</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                        <option value="Delhi">Delhi</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Address Type</label>
+                    <select id="addressType">
+                        <option value="home">Home</option>
+                        <option value="office">Office</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="checkbox" id="defaultAddress">
+                        <span>Set as default address</span>
+                    </label>
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">Save Address</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeAddressModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:5000';
+        let currentUser = null;
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            checkAuthAndLoadUser();
+            loadUserData();
+        });
+
+        // Check authentication
+        function checkAuthAndLoadUser() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+
+            if (!token || !user) {
+                window.location.href = 'register.html';
+                return;
+            }
+
+            try {
+                currentUser = JSON.parse(user);
+                document.getElementById('profileName').textContent = currentUser.full_name;
+                document.getElementById('profileEmail').textContent = currentUser.email;
+                document.getElementById('avatarInitial').textContent = currentUser.full_name.charAt(0).toUpperCase();
+            } catch (error) {
+                console.error('Error parsing user data:', error);
+                window.location.href = 'register.html';
+            }
+        }
+
+        // Menu navigation
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const section = item.getAttribute('data-section');
+
+                // Update active menu item
+                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+
+                // Show selected section
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                document.getElementById(section).classList.add('active');
+
+                // Load section data
+                loadSectionData(section);
+            });
+        });
+
+        // Load user data
+        async function loadUserData() {
+            try {
+                // Load personal info
+                document.getElementById('fullName').value = currentUser.full_name;
+                document.getElementById('email').value = currentUser.email;
+                document.getElementById('mobile').value = currentUser.mobile || '';
+
+                // Load overview stats
+                loadOverviewStats();
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+
+        // Load overview statistics
+        function loadOverviewStats() {
+            // Mock data - replace with actual API calls
+            document.getElementById('totalOrders').textContent = '12';
+            document.getElementById('wishlistCount').textContent = '8';
+            document.getElementById('addressCount').textContent = '3';
+            document.getElementById('totalSpent').textContent = '₹45,280';
+
+            loadRecentOrders();
+        }
+
+        // Load recent orders
+        function loadRecentOrders() {
+            const recentOrdersHTML = `
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-id">#ORD-2024-00123</div>
+                        <div class="order-status status-delivered">Delivered</div>
+                    </div>
+                    <div class="order-items">
+                        <div class="order-item">
+                            <div class="item-image">📱</div>
+                            <div class="item-details">
+                                <div class="item-name">Samsung Galaxy S24</div>
+                                <div class="item-specs">Phantom Black, 256GB</div>
+                            </div>
+                            <div class="item-price">₹74,999</div>
+                        </div>
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-date">Delivered on Jan 15, 2024</div>
+                        <div class="order-total">₹74,999</div>
+                    </div>
+                </div>
+
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-id">#ORD-2024-00122</div>
+                        <div class="order-status status-shipped">Shipped</div>
+                    </div>
+                    <div class="order-items">
+                        <div class="order-item">
+                            <div class="item-image">👟</div>
+                            <div class="item-details">
+                                <div class="item-name">Nike Air Max 270</div>
+                                <div class="item-specs">White/Blue, Size 9</div>
+                            </div>
+                            <div class="item-price">₹12,495</div>
+                        </div>
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-date">Expected by Jan 25, 2024</div>
+                        <div class="order-total">₹12,495</div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('recentOrders').innerHTML = recentOrdersHTML;
+        }
+
+        // Load section data
+        function loadSectionData(section) {
+            switch (section) {
+                case 'addresses':
+                    loadAddresses();
+                    break;
+                case 'orders':
+                    loadAllOrders();
+                    break;
+                case 'wishlist':
+                    loadWishlist();
+                    break;
+                case 'payment-methods':
+                    loadPaymentMethods();
+                    break;
+                case 'security':
+                    loadLoginActivity();
+                    break;
+            }
+        }
+
+        // Load addresses
+        function loadAddresses() {
+            const addressesHTML = `
+                <div class="address-card default">
+                    <div class="address-badge">Default</div>
+                    <div class="address-name">Home - John Doe</div>
+                    <div class="address-details">
+                        123, Park Street, Near City Mall<br>
+                        Kolkata, West Bengal - 700016<br>
+                        Mobile: +91 98765 43210
+                    </div>
+                    <div class="address-actions">
+                        <button class="btn btn-secondary btn-small">Edit</button>
+                        <button class="btn btn-danger btn-small">Delete</button>
+                    </div>
+                </div>
+
+                <div class="address-card">
+                    <div class="address-name">Office - John Doe</div>
+                    <div class="address-details">
+                        456, Tech Park, Sector V<br>
+                        Salt Lake, Kolkata - 700091<br>
+                        Mobile: +91 98765 43210
+                    </div>
+                    <div class="address-actions">
+                        <button class="btn btn-secondary btn-small">Edit</button>
+                        <button class="btn btn-danger btn-small">Delete</button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('addressesList').innerHTML = addressesHTML;
+        }
+
+        // Load all orders
+        function loadAllOrders() {
+            const ordersHTML = `
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-id">#ORD-2024-00123</div>
+                        <div class="order-status status-delivered">Delivered</div>
+                    </div>
+                    <div class="order-items">
+                        <div class="order-item">
+                            <div class="item-image">📱</div>
+                            <div class="item-details">
+                                <div class="item-name">Samsung Galaxy S24</div>
+                                <div class="item-specs">Phantom Black, 256GB</div>
+                            </div>
+                            <div class="item-price">₹74,999</div>
+                        </div>
+                        <div class="order-item">
+                            <div class="item-image">🎧</div>
+                            <div class="item-details">
+                                <div class="item-name">Sony WH-1000XM5</div>
+                                <div class="item-specs">Black, Wireless</div>
+                            </div>
+                            <div class="item-price">₹29,990</div>
+                        </div>
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-date">Delivered on Jan 15, 2024</div>
+                        <div class="order-total">Total: ₹1,04,989</div>
+                    </div>
+                </div>
+
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-id">#ORD-2024-00122</div>
+                        <div class="order-status status-shipped">Shipped</div>
+                    </div>
+                    <div class="order-items">
+                        <div class="order-item">
+                            <div class="item-image">👟</div>
+                            <div class="item-details">
+                                <div class="item-name">Nike Air Max 270</div>
+                                <div class="item-specs">White/Blue, Size 9</div>
+                            </div>
+                            <div class="item-price">₹12,495</div>
+                        </div>
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-date">Expected by Jan 25, 2024</div>
+                        <div class="order-total">Total: ₹12,495</div>
+                    </div>
+                </div>
+
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-id">#ORD-2024-00121</div>
+                        <div class="order-status status-processing">Processing</div>
+                    </div>
+                    <div class="order-items">
+                        <div class="order-item">
+                            <div class="item-image">💻</div>
+                            <div class="item-details">
+                                <div class="item-name">MacBook Pro 16"</div>
+                                <div class="item-specs">M3 Pro, 18GB RAM, 512GB SSD</div>
+                            </div>
+                            <div class="item-price">₹2,49,900</div>
+                        </div>
+                    </div>
+                    <div class="order-footer">
+                        <div class="order-date">Ordered on Jan 20, 2024</div>
+                        <div class="order-total">Total: ₹2,49,900</div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('ordersList').innerHTML = ordersHTML;
+        }
+
+        // Load wishlist
+        function loadWishlist() {
+            const wishlistHTML = `
+                <div class="wishlist-item">
+                    <button class="remove-wishlist" onclick="removeFromWishlist(1)">×</button>
+                    <div class="wishlist-image">📱</div>
+                    <div class="wishlist-content">
+                        <div class="wishlist-name">iPhone 15 Pro</div>
+                        <div class="wishlist-price">₹1,29,900</div>
+                        <button class="btn btn-primary btn-small" style="width: 100%;">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="wishlist-item">
+                    <button class="remove-wishlist" onclick="removeFromWishlist(2)">×</button>
+                    <div class="wishlist-image">⌚</div>
+                    <div class="wishlist-content">
+                        <div class="wishlist-name">Apple Watch Series 9</div>
+                        <div class="wishlist-price">₹44,900</div>
+                        <button class="btn btn-primary btn-small" style="width: 100%;">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="wishlist-item">
+                    <button class="remove-wishlist" onclick="removeFromWishlist(3)">×</button>
+                    <div class="wishlist-image">🎮</div>
+                    <div class="wishlist-content">
+                        <div class="wishlist-name">PlayStation 5</div>
+                        <div class="wishlist-price">₹54,990</div>
+                        <button class="btn btn-primary btn-small" style="width: 100%;">Add to Cart</button>
+                    </div>
+                </div>
+
+                <div class="wishlist-item">
+                    <button class="remove-wishlist" onclick="removeFromWishlist(4)">×</button>
+                    <div class="wishlist-image">📷</div>
+                    <div class="wishlist-content">
+                        <div class="wishlist-name">Canon EOS R6</div>
+                        <div class="wishlist-price">₹2,39,995</div>
+                        <button class="btn btn-primary btn-small" style="width: 100%;">Add to Cart</button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('wishlistItems').innerHTML = wishlistHTML;
+        }
+
+        // Load payment methods
+        function loadPaymentMethods() {
+            const paymentHTML = `
+                <div class="address-card">
+                    <div class="address-name">💳 Visa ending in 4242</div>
+                    <div class="address-details">
+                        Expires: 12/25<br>
+                        Name: John Doe
+                    </div>
+                    <div class="address-actions">
+                        <button class="btn btn-secondary btn-small">Edit</button>
+                        <button class="btn btn-danger btn-small">Remove</button>
+                    </div>
+                </div>
+
+                <div class="address-card default">
+                    <div class="address-badge">Default</div>
+                    <div class="address-name">💳 Mastercard ending in 8888</div>
+                    <div class="address-details">
+                        Expires: 06/26<br>
+                        Name: John Doe
+                    </div>
+                    <div class="address-actions">
+                        <button class="btn btn-secondary btn-small">Edit</button>
+                        <button class="btn btn-danger btn-small">Remove</button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('paymentMethodsList').innerHTML = paymentHTML;
+        }
+
+        // Load login activity
+        function loadLoginActivity() {
+            const activityHTML = `
+                <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600;">💻 Chrome on Windows</div>
+                            <div style="color: #666; font-size: 0.85rem;">Kolkata, India</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="color: #2ecc71; font-weight: 600;">Active Now</div>
+                            <div style="color: #666; font-size: 0.85rem;">Jan 27, 2024 10:30 AM</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; margin-bottom: 0.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 600;">📱 Safari on iPhone</div>
+                            <div style="color: #666; font-size: 0.85rem;">Mumbai, India</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="color: #666; font-size: 0.85rem;">Jan 25, 2024 3:45 PM</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('loginActivity').innerHTML = activityHTML;
+        }
+
+        // Personal info form submission
+        document.getElementById('personalInfoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                full_name: document.getElementById('fullName').value,
+                mobile: document.getElementById('mobile').value,
+                dob: document.getElementById('dob').value,
+                gender: document.getElementById('gender').value,
+                alternate_mobile: document.getElementById('alternateMobile').value
+            };
+
+            try {
+                // API call to update profile
+                showToast('Profile updated successfully!', 'success');
+
+                // Update local storage
+                currentUser.full_name = formData.full_name;
+                localStorage.setItem('user', JSON.stringify(currentUser));
+
+                // Update UI
+                document.getElementById('profileName').textContent = formData.full_name;
+            } catch (error) {
+                showToast('Failed to update profile', 'error');
+            }
+        });
+
+        // Password form submission
+        document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmNewPassword').value;
+
+            if (newPassword !== confirmPassword) {
+                showToast('Passwords do not match!', 'error');
+                return;
+            }
+
+            try {
+                // API call to update password
+                showToast('Password updated successfully!', 'success');
+                document.getElementById('passwordForm').reset();
+            } catch (error) {
+                showToast('Failed to update password', 'error');
+            }
+        });
+
+        // Address form submission
+        document.getElementById('addressForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            showToast('Address added successfully!', 'success');
+            closeAddressModal();
+            loadAddresses();
+        });
+
+        // Modal functions
+        function showAddAddressModal() {
+            document.getElementById('addressModal').classList.add('show');
+        }
+
+        function closeAddressModal() {
+            document.getElementById('addressModal').classList.remove('show');
+            document.getElementById('addressForm').reset();
+        }
+
+        function showAddPaymentModal() {
+            showToast('Payment method feature coming soon!', 'success');
+        }
+
+        // Remove from wishlist
+        function removeFromWishlist(id) {
+            if (confirm('Remove this item from wishlist?')) {
+                showToast('Item removed from wishlist', 'success');
+                loadWishlist();
+            }
+        }
+
+        // Delete account
+        function confirmDeleteAccount() {
+            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                if (confirm('This will permanently delete all your data. Are you absolutely sure?')) {
+                    showToast('Account deletion requested. You will receive a confirmation email.', 'success');
+                }
+            }
+        }
+
+        // Reset personal info
+        function resetPersonalInfo() {
+            loadUserData();
+            showToast('Changes discarded', 'success');
+        }
+
+        // Logout
+        function handleLogout(event) {
+            event.preventDefault();
+
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                localStorage.removeItem('cart');
+                showToast('Logged out successfully', 'success');
+
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 1000);
+            }
+        }
+
+        // Toast notification
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+
+            toast.className = `toast toast-${type} show`;
+            toastMessage.textContent = message;
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Avatar upload
+        document.getElementById('avatarInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                showToast('Avatar updated successfully!', 'success');
+            }
+        });
+    </script>
+</body>
+
+</html>
